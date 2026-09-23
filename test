@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<link rel="icon" href="DS.png"> <!-- favicon  da página -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <title>Minha página</title>
+<style>
+  .foto-perfil {
+    border-radius: 15px;
+    object-fit: cover;
+  }
+</style>
+
+</head>
+<body>
+
+  <h1>Pedro Levi de Araujo Gonzaga</h1>
+<img src="my.jpg" alt="Foto de Pedro Levi" width="300" height="300" class="foto-perfil">
+  <p>Curso: Sistemas de Informação</p>
+  <p>Primeiro Semestre</p>
+
+
+  <h2>Sobre mim</h2>
+  <p>Sou técnico em Redes de Computadores e estou no início da graduação em Sistemas de Informação. Este site foi feito para praticar HTML.</p>
+
+  <h2>Habilidades</h2>
+  <p>Linguagens de programação</p>
+  <ul>
+    <li><img src="Java.png" alt="Java" width="16" height="16" style="vertical-align: middle;"> Java </li>
+    <li><img src="https://cdn.simpleicons.org/python" alt="python" width="16" height="16" style="vertical-align: middle;"> Python  </li>
+    <li><img src="https://cdn.simpleicons.org/cplusplus" alt="cplusplus" width="16" height="16" style="vertical-align: middle;"> C++ </li> 
+  </ul>
+
+  <h2>Especificações do meu PC</h2>
+  <ul>
+    <li>Processador: AMD Ryzen 5 4600G</li>
+    <li>GPU: AMD Radeon RX 6600</li>
+    <li>Memória RAM: DDR4 16GB</li>
+    <li>Fonte: Corsair 450W</li>
+    <li>Capacidade: SSD 240GB, HD 1TB</li>
+    <li>Monitor: Monitor Gamer Duex 27"</li>
+  </ul>
+
+  <h3>Periféricos</h3>
+  <ul>
+    <li>Teclado: Redragon Kumara K552</li>
+    <li>Mouse: Redragon Cobra M711</li>
+    <li>Mesa Digitalizadora: XPPen Deco 01 v3</li>
+    <li>Fone: JBL Tune 730BT</li>
+    <li>Microfone: Fifine AM8</li>
+  </ul>
+
+  <h2>Contato</h2>
+  <ul>
+    <li> <img src="https://cdn.simpleicons.org/github" alt="GitHub" width="16" height="16" style="vertical-align: middle;"> <a href="https://github.com/PedroLevi2099" target="_blank">GitHub</a>  </li>
+    <li> <img src="https://cdn.simpleicons.org/x" alt="x" width="16" height="16" style="vertical-align: middle;"> <a href="https://x.com/Falko_Dark" target="_blank">Twitter</a></li>
+    <li> <img src="backloggd.png" alt="Backloggd" width="16" height="16" style="vertical-align: middle;"> <a href="https://backloggd.com/u/Falko_Dark/" target="_blank">Backloggd</a></li>
+    <li> <img src="https://cdn.simpleicons.org/steam" alt="steam" width="16" height="16" style="vertical-align: middle;"> <a href="https://steamcommunity.com/profiles/76561198316249874/" target="_blank">Steam</a></li>
+  </ul>
+
+</body>
+</html>
