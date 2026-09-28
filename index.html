@@ -1,13 +1,178 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Minha página</title>
-  </head>
-  <body>
-    <h1>senhor larp</h1>
-    <p>Curso: Sistemas de Informação</p>
-    <p>Primeiro Semestre</p>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Biblioteca do Lanterna Verde</title>
+<style>
+  :root {
+    --bg: #040806; --green: #22e06b; --dim: #0f7a3a; --ink: #e6f4ea; --mute: rgba(230,244,234,.55);
+    --line: rgba(34,224,107,.3);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body {
+    background:
+      radial-gradient(520px 420px at 68% 38%, rgba(34,224,107,.22), transparent 70%),
+      radial-gradient(900px 500px at 10% 100%, rgba(15,122,58,.25), transparent 70%),
+      var(--bg);
+    color: var(--ink); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow: hidden; position: relative;
+  }
+  /* planeta ao fundo */
+  .planet { position: absolute; right: -8vw; top: 6vh; width: 46vw; height: 46vw; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(34,224,107,.16), transparent 60%);
+    border-top: 1px solid rgba(34,224,107,.25); }
+
+  nav { position: absolute; top: 28px; left: 40px; right: 40px; display: flex; align-items: center; gap: 44px; z-index: 5; }
+  nav svg { width: 40px; height: 40px; }
+  nav a { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--mute); text-decoration: none; padding-bottom: 6px; }
+  nav a.on { color: var(--ink); border-bottom: 1px solid var(--green); }
+
+  .hero { position: absolute; left: 6vw; top: 17vh; z-index: 5; }
+  .hero small { font-size: 12px; letter-spacing: .5em; color: var(--mute); }
+  .hero h1 { margin-top: 18px; font-weight: 300; font-size: clamp(24px, 3.6vw, 46px); letter-spacing: .5em; text-transform: uppercase; }
+  .hero hr { width: 40px; border: 0; border-top: 1px solid var(--green); margin: 26px 0; }
+  .hero p { color: var(--mute); line-height: 1.7; font-size: 15px; }
+  .hero button { margin-top: 32px; background: none; color: var(--green); border: 1px solid var(--green);
+    padding: 14px 22px; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; cursor: pointer; }
+  .hero button:hover { background: rgba(34,224,107,.1); }
+
+  .menu { position: absolute; right: 5vw; top: 15vh; z-index: 5; width: 170px; padding: 22px;
+    background: rgba(34,224,107,.05); border: 1px solid var(--line); border-radius: 8px; }
+  .menu span { display: block; font-size: 10px; letter-spacing: .3em; color: var(--mute); margin-bottom: 18px; cursor: pointer; }
+  .menu span:hover { color: var(--green); }
+
+  /* carrossel 3D em anel */
+  .scene { position: absolute; left: 0; right: 0; top: 30vh; bottom: 0; perspective: 1500px; cursor: grab; touch-action: pan-y; z-index: 3; }
+  .scene.drag { cursor: grabbing; }
+  .ring { position: absolute; left: 50%; top: 40%; transform-style: preserve-3d; }
+  .card {
+    position: absolute; width: var(--w); height: calc(var(--w) * 1.55);
+    margin-left: calc(var(--w) / -2); margin-top: calc(var(--w) * -0.775);
+    background: linear-gradient(160deg, rgba(34,224,107,.10), rgba(34,224,107,.03));
+    border: 1px solid var(--line); border-radius: 10px; padding: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.55), 0 0 30px rgba(34,224,107,.06);
+    backface-visibility: hidden; user-select: none; will-change: transform, opacity;
+  }
+  .card.active { border-color: rgba(34,224,107,.6); box-shadow: 0 24px 70px rgba(0,0,0,.6), 0 0 40px rgba(34,224,107,.2); }
+  .top { display: flex; justify-content: space-between; align-items: center; height: 14px; margin-bottom: 8px; color: var(--green); font-size: 14px; line-height: 1; }
+  .top i { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--green); margin-right: 4px; }
+  .cover { width: 100%; aspect-ratio: 2 / 3; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; position: relative;
+    display: flex; align-items: flex-end; padding: 10px; background: linear-gradient(170deg, #0f3a1f, #050a07); }
+  .cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+  .cover b { font-style: italic; font-weight: 800; font-size: calc(var(--w) * .1); color: var(--green); text-shadow: 0 0 14px rgba(34,224,107,.5); line-height: 1; position: relative; }
+  .meta { margin-top: 12px; }
+  .meta h3 { font-weight: 400; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+  .meta p { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: var(--mute); }
+
+  .arrow { position: absolute; top: 62%; z-index: 6; background: none; border: 0; color: var(--green); font-size: 30px; cursor: pointer; padding: 10px; }
+  .arrow.l { left: 4vw; } .arrow.r { right: 4vw; }
+  .quote { position: absolute; left: 6vw; bottom: 4vh; z-index: 5; max-width: 200px; font-size: 12px; line-height: 1.7; color: var(--mute); border-top: 1px solid var(--green); padding-top: 16px; }
+  .oath { position: absolute; right: 4vw; bottom: 4vh; z-index: 5; text-align: right; font-size: 10px; letter-spacing: .3em; color: var(--dim); line-height: 2; text-transform: uppercase; }
+
+  @media (max-width: 720px) {
+    nav { gap: 18px; left: 20px; } nav a:nth-child(n+4) { display: none; }
+    .menu, .oath, .quote, .planet { display: none; }
+    .hero { top: 14vh; } .hero h1 { letter-spacing: .3em; }
+    .scene { top: 42vh; } .arrow { top: 72%; }
+  }
+</style>
+</head>
+<body>
+<div class="planet"></div>
+
+<nav>
+  <svg viewBox="0 0 40 40" fill="none" stroke="#22e06b" stroke-width="4"><rect x="6" y="7" width="28" height="26" rx="13"/><rect x="14" y="14" width="12" height="12" rx="6"/></svg>
+  <a class="on">HQs</a><a>Personagens</a><a>Sagas</a><a>Sobre</a>
+</nav>
+
+<div class="hero">
+  <small>BIBLIOTECA DO</small>
+  <h1>Lanterna Verde</h1>
+  <hr>
+  <p>O universo é vasto.<br>E as histórias também.</p>
+  <button>Explorar HQs &nbsp;→</button>
+</div>
+
+<div class="menu"><span>+ MAIS LIDAS</span><span>RECENTES</span><span>CLÁSSICAS</span><span>EVENTOS</span></div>
+
+<div class="scene" id="scene"><div class="ring" id="ring"></div></div>
+<button class="arrow l" id="prev">‹</button>
+<button class="arrow r" id="next">›</button>
+
+<div class="quote">“Talvez fosse mais fácil voar do que ficar com os meus pés no chão. Que eu tenha valido a pena.”<br><br>— Hal Jordan</div>
+<div class="oath">In brightest day…<br>in blackest night…</div>
+
+<script>
+  // ✏️ EDITE AQUI: coloque o nome do arquivo da capa em "img" (ex: "capa1.jpg")
+  const hqs = [
+    { t: "Green Lantern #1", a: "Johns · Reis · Prado", y: 2005, img: "lv5.jpg" },
+    { t: "Blackest Night", a: "Geoff Johns · Ivan Reis", y: 2009, img: "lv13.png" },
+    { t: "Green Lantern Corps", a: "Tomasi · Pasarin", y: 2011, img: "lv1.jpg" },
+    { t: "Sinestro Corps War", a: "Geoff Johns · Ivan Reis", y: 2007, img: "lv2.jpg" },
+    { t: "Rebirth", a: "Geoff Johns · Van Sciver", y: 2004, img: "lv4.jpg" },
+    { t: "Secret Origin", a: "Geoff Johns · Reis", y: 2008, img: "lv11.png" },
+    { t: "Emerald Twilight", a: "Ron Marz", y: 1994, img: "lv3.jpg" },
+    { t: "Wrath of the First Lantern", a: "Johns · Reis", y: 2011, img: "lv12.png" }
+  ];
+
+  const ring = document.getElementById('ring'), scene = document.getElementById('scene');
+  const N = hqs.length, step = 360 / N;
+  let rot = 0, target = 0, R = 0;
+
+  const cards = hqs.map(h => {
+    const c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML = `<div class="top"><span><i></i><i></i><i></i></span><span>+</span></div>
+      <div class="cover"><b>${h.t}</b>${h.img ? `<img src="${h.img}" alt="${h.t}">` : ''}</div>
+      <div class="meta"><h3>${h.t}</h3><p><span>${h.a}</span><span>${h.y}</span></p></div>`;
+    ring.appendChild(c);
+    return c;
+  });
+
+  function size() {
+    const w = Math.max(170, Math.min(260, innerWidth * 0.2));
+    document.documentElement.style.setProperty('--w', w + 'px');
+    R = (w * 0.5 + 60) / Math.tan(Math.PI / N);   // raio do anel
+    ring.style.transform = `translateZ(${-R}px)`;
+  }
+
+  function draw() {
+    cards.forEach((c, i) => {
+      let a = ((i * step - rot + 540) % 360) - 180;   // -180..180
+      c.style.transform = `rotateY(${a}deg) translateZ(${R}px)`;
+      c.style.opacity = Math.max(0, 1 - Math.abs(a) / 100).toFixed(2);
+      c.classList.toggle('active', Math.abs(a) < step / 2);
+    });
+  }
+
+  // animação suave até o alvo
+  (function loop() {
+    rot += (target - rot) * 0.12;
+    draw();
+    requestAnimationFrame(loop);
+  })();
+
+  const snap = () => { target = Math.round(target / step) * step; };
+  const go = d => { target = Math.round(target / step) * step + d * step; };
+
+  // arrastar para o lado
+  let down = false, x0 = 0, t0 = 0;
+  scene.addEventListener('pointerdown', e => { down = true; x0 = e.clientX; t0 = target; scene.classList.add('drag'); scene.setPointerCapture(e.pointerId); });
+  scene.addEventListener('pointermove', e => { if (down) target = t0 - (e.clientX - x0) * 0.22; });
+  const end = () => { if (!down) return; down = false; scene.classList.remove('drag'); snap(); };
+  scene.addEventListener('pointerup', end);
+  scene.addEventListener('pointercancel', end);
+
+  document.getElementById('prev').onclick = () => go(-1);
+  document.getElementById('next').onclick = () => go(1);
+  addEventListener('keydown', e => { if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); });
+  addEventListener('resize', size);
+  size();
+</script>
+</body>
 </html>
